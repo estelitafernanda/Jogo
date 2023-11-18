@@ -1,7 +1,6 @@
+const gravity = 0.2
 
-const gravity = 0.9
-
-const floorHeight = 100
+const floorHeight = 155
 
 const backgroundSpritePath = "/mapa/imagem.jpg"
 const defaultObjectSpritePath ="/objects/square.svg"
@@ -48,6 +47,7 @@ class Sprite {
             this.currentSprite = this.sprites.idle
         }
     }
+
     loadSprite(){
       let previousSprite = this.image.src
 
@@ -115,9 +115,7 @@ class Sprite {
 
     update (){
         this.draw()
-        if (keys.a.pressed || keys.d.pressed || keys.w.pressed) {
-          this.animate();
-        }
+        this.animate();
     }
 }
 
@@ -137,7 +135,7 @@ class Fighter extends Sprite{
 
         this.velocity = velocity;
         this.lastKeyPressed;
-        this.onGround = false; 
+        this.onGround  
 
     }
 
@@ -149,6 +147,13 @@ class Fighter extends Sprite{
           this.velocity.y = 0;
       } else {
           this.velocity.y += gravity;
+      }
+      if (this.position.x < 0) {
+        this.position.x = 0;
+      }
+      if (this.position.y < 0) {
+        this.position.y = 0;
+        this.velocity.y = 0; 
       }
 
       this.position.x += this.velocity.x;
@@ -163,17 +168,16 @@ class Fighter extends Sprite{
     }
     }
     jump(){
-      if (this.onGround) {
+      if (!this.onGround && keys.w.pressed && !keys.w.hold) return
         this.velocity.y = -15; 
-        this.currentSpriteFrame = 0;
-      }
+        keys.w.hold = true;
    } 
 }
 
 const bonequinha = new Fighter({
     position: {
       x: 10, 
-      y: 20
+      y: 0
     },
     velocity: {
       x: 0,
@@ -189,12 +193,12 @@ const bonequinha = new Fighter({
        running: {
           src: "/sprites/runboneca.png",
           totalSpriteFrames: 8,
-          framesPerSpriteFrame: 10
+          framesPerSpriteFrame: 6
        },
        jumping: {
           src: "/sprites/jumpboneca.png",
           totalSpriteFrames: 8,
-          framesPerSpriteFrame: 15
+          framesPerSpriteFrame: 16
        }
     }   
 })
