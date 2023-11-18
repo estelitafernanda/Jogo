@@ -10,7 +10,8 @@ const keys = {
         hold: false
     },
     space: {
-        pressed: false
+        pressed: false,
+        hold: false
     }
 }
 
@@ -57,10 +58,17 @@ window.addEventListener("keyup", e =>{
             keys.w.pressed = false
             keys.w.hold = false
             break;
+        case "z":
+        case " ":
+            keys.space.pressed = false
+            keys.space.hold = false
+            break
     }
 })
 function handleControls() {
     bonequinha.setSprite("idle");
+
+    if (!bonequinha.onGround) bonequinha.setSprite("jumping"); 
 
     movement();
 
@@ -84,13 +92,13 @@ function handleControls() {
             if (!bonequinha.onGround) return;
             bonequinha.setSprite("running");
         }
-        if (keys.w.pressed && !keys.w.hold && bonequinha.onGround) {
+        
+        bonequinha.jump();
+        /*if (keys.w.pressed && !keys.w.hold) {
             console.log('Jumping!');
             bonequinha.jump();
             keys.w.hold = true;
             bonequinha.setSprite("jumping");
-        } else if (!keys.w.pressed) {
-            keys.w.hold = false;
-        }
+        }*/
     }
 }
